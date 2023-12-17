@@ -4,6 +4,6 @@ node(){
         }
     stage('Test') {
         //image 'qnib/pytest'
-        sh 'py.test sources/test_calc.py'
+        sh 'python3 py.test sources/test_calc.py'
         }
 }
