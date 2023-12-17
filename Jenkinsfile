@@ -15,7 +15,7 @@ node(){
         withEnv(["VOLUME=${VOLUME}", "IMAGE=${IMAGE}"]) {
             dir(path: env.BUILD_ID) {
                 unstash name: 'compiled-results'
-                sh "docker run --rm -v ${VOLUME} ${IMAGE} pyinstaller --onefile /src/add2vals.py"
+                sh "docker run --rm -v ${VOLUME} ${IMAGE} python -m pyinstaller --onefile add2vals.py"
             }
         }
 
