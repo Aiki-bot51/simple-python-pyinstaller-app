@@ -8,22 +8,4 @@ node(){
             sh 'py.test --junit-xml test-reports/results.xml sources/test_calc.py'
         }
     }
-    stage('Deliver') {
-        def VOLUME = "\"${pwd()}/sources:/src\""
-        def IMAGE = 'cdrx/pyinstaller-linux:python3'.toLowerCase()
-
-        withEnv(["VOLUME=${VOLUME}", "IMAGE=${IMAGE}"]) {
-            dir(path: env.BUILD_ID) {
-                unstash name: 'compiled-results'
-                sh "docker run --rm -v ${VOLUME} -t ${IMAGE} sh -c 'cd /src && python -m pyinstaller --onefile add2vals.py > pyinstaller.log 2>&1'"
-            }
-        }
-
-        post {
-            success {
-                archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
-                sh "docker run --rm -v ${VOLUME} ${IMAGE} rm -rf build dist"
-            }
-        }
-    }
 }
