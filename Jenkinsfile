@@ -15,14 +15,14 @@ node(){
         withEnv(["volume=${volume}", "image=${image}"]) {
             dir(path: env.BUILD_ID) {
                 unstash name: 'compiled-results'
-                sh "docker run --rm -v ${volume} ${image} 'pyinstaller -F add2vals.py'"
+                sh "docker run --rm -v "${volume}""${image}" 'pyinstaller -F add2vals.py'"
             }
         }
 
         post {
             success {
                 archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
-                sh "docker run --rm -v ${volume} ${image} 'rm -rf build dist'"
+                sh "docker run --rm -v "${volume}""${image}" 'rm -rf build dist'"
             }
         }
     }
