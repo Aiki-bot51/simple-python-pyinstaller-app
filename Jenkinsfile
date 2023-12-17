@@ -9,20 +9,20 @@ node(){
         }
     }
     stage('Deliver') {
-        def volume = "${pwd()}/sources:/src"
-        def image = 'cdrx/pyinstaller-linux:python3'
+        def VOLUME = "${pwd()}/sources:/src"
+        def IMAGE = 'cdrx/pyinstaller-linux:python2'.toLowerCase()
 
-        withEnv(["volume=${volume}", "image=${image}"]) {
-            dir(path: env.build_id) {
+        withEnv(["VOLUME=${VOLUME}", "IMAGE=${IMAGE}"]) {
+            dir(path: env.BUILD_ID) {
                 unstash name: 'compiled-results'
-                sh "docker run --rm -v ${volume} ${image} 'pyinstaller -F add2vals.py'"
+                sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
+                }
             }
-        }
 
         post {
             success {
                 archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
-                sh "docker run --rm -v ${volume} ${image} 'rm -rf build dist'"
+                sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
             }
         }
     }
