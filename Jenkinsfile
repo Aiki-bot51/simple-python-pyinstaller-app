@@ -9,7 +9,7 @@ node(){
         }
     }
     stage('Deliver') {
-        def VOLUME = "${pwd()}/sources:/src"
+        def VOLUME = "\"${pwd()}/sources:/src\""
         def IMAGE = 'cdrx/pyinstaller-linux:python2'.toLowerCase()
 
         withEnv(["VOLUME=${VOLUME}", "IMAGE=${IMAGE}"]) {
