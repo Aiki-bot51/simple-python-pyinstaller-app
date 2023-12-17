@@ -10,12 +10,12 @@ node(){
     }
     stage('Deliver') {
         def VOLUME = "\"${pwd()}/sources:/src\""
-        def IMAGE = 'cdrx/pyinstaller-linux:python2'.toLowerCase()
+        def IMAGE = 'cdrx/pyinstaller-linux:python3'.toLowerCase()
 
         withEnv(["VOLUME=${VOLUME}", "IMAGE=${IMAGE}"]) {
             dir(path: env.BUILD_ID) {
                 unstash name: 'compiled-results'
-                sh "docker run --rm -v ${VOLUME} ${IMAGE} pyinstaller -F add2vals.py"
+                sh "docker run --rm -v ${VOLUME} ${IMAGE} pyinstaller --onefile /src/add2vals.py"
             }
         }
 
