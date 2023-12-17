@@ -4,6 +4,6 @@ node(){
         stash(name: 'compiled-results', includes: 'sources/*.py*')
         }
     stage('Test') {
-        sh 'python3 py.test sources/test_calc.py'
+        sh 'py.test sources/test_calc.py'
         }
 }
