@@ -10,7 +10,7 @@ node(){
     }
     stage('Deliver') {
         // Use any available agent
-        withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python2']) {
+        withEnv(['VOLUME = "\"$(pwd)/sources:/src\""', 'IMAGE=cdrx/pyinstaller-linux:python2']) {
             // Run Docker container to create distributable binary using PyInstaller
             dir(path: env.BUILD_ID) {
                 unstash name: 'compiled-results'
