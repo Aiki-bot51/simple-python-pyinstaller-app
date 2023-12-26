@@ -8,13 +8,14 @@ node(){
             sh 'py.test --junit-xml test-reports/results.xml sources/test_calc.py'
         }
     }
-        stage('Deliver') {
+    stage('Deliver') {
+        withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python2']) {
             dir(path: env.BUILD_ID) {
-                sh 'docker run -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'pyinstaller -F add2vals.py\''
                 unstash name: 'compiled-results'
+                sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
                 archiveArtifacts "sources/dist/add2vals"
-                sh 'docker run -v $(pwd)/sources:/src cdrx/pyinstaller-linux:python2 \'rm -rf build dist\''
+                sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
             }
-        
+        }
     }
 }
