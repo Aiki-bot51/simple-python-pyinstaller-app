@@ -12,7 +12,7 @@ node(){
         }
     }
     stage('Manual Approval'){
-        input message: 'Sudah selesai menggunakan React App? (Klik "Proceed" untuk mengakhiri)'
+        input message: 'Apakah hasil sudah OK? (Klik "Proceed" untuk Deploy)'
     }
     stage('Deploy'){
         withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python3']) {
