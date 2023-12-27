@@ -11,7 +11,7 @@ node(){
             sh 'py.test --junit-xml test-reports/results.xml sources/test_calc.py'
         }
     }
-    stage('Manual Approval'){
+/*    stage('Manual Approval'){
         input message: 'Sudah selesai menggunakan React App? (Klik "Proceed" untuk mengakhiri)' 
     }
     stage('Deploy') {
@@ -23,5 +23,5 @@ node(){
                 sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
             }
         }
-    }
+    }*/
 }
