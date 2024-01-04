@@ -1,9 +1,9 @@
 node(){
-        stage('Build') {
-            checkout scm
-            sh 'python3 -m py_compile sources/add2vals.py sources/calc.py'
-            stash(name: 'compiled-results', includes: 'sources/*.py*')
-        }
+    stage('Build') {
+        checkout scm
+        sh 'python3 -m py_compile sources/add2vals.py sources/calc.py'
+        stash(name: 'compiled-results', includes: 'sources/*.py*')
+    }
     stage('Test') {
         docker.image('qnib/pytest').inside {
             sh 'py.test --junit-xml test-reports/results.xml sources/test_calc.py'
@@ -21,6 +21,21 @@ node(){
                 sh 'sleep 60'
                 archiveArtifacts "sources/dist/add2vals"
                 sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+
+                // Upload artifact to GitHub Releases
+                script {
+                    def githubToken = env.GITHUB_TOKEN  // Set your GitHub token as a secret in Jenkins
+                    def artifactPath = "sources/dist/add2vals"
+                    def githubRepoUrl = env.GITHUB_REPO_URL  // Assume GITHUB_REPO_URL is an environment variable or parameter
+    
+                    withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                        sh "curl -sSL -H 'Authorization: token ${GITHUB_TOKEN}' \
+                            -H 'Content-Type: application/octet-stream' \
+                            --data-binary @${artifactPath} \
+                            '${githubRepoUrl}/releases/latest/assets?name=add2vals'"
+                    } 
+                }
+
             }
         }
     }
