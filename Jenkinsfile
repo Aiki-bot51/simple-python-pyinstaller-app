@@ -26,7 +26,7 @@ node(){
                 script {
                     def githubToken = env.GITHUB_TOKEN  // Set your GitHub token as a secret in Jenkins
                     def artifactPath = "sources/dist/add2vals"
-                    def githubRepoUrl = env.GITHUB_REPO_URL  // Assume GITHUB_REPO_URL is an environment variable or parameter
+                    def githubRepoUrl = params.GITHUB_REPO_URL  // Assume GITHUB_REPO_URL is an environment variable or parameter
 
                     echo "Constructed URL: ${githubRepoUrl}/releases/latest/assets?name=add2vals"
 
