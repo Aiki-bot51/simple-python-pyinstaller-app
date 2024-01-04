@@ -29,12 +29,12 @@ node(){
                     def githubRepoUrl = env.GITHUB_REPO_URL  // Assume GITHUB_REPO_URL is an environment variable or parameter
     
                     withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                    sh """
-                        curl -sSL -H 'Authorization: token ${GITHUB_TOKEN}' \
-                        -H 'Content-Type: application/octet-stream' \
-                        --data-binary @${artifactPath} \
-                        '${githubRepoUrl}/releases/latest/assets?name=add2vals'
-                        """
+                        sh '''
+                            curl -sSL -H 'Authorization: token ''' + GITHUB_TOKEN + ''' ' \
+                            -H 'Content-Type: application/octet-stream' \
+                            --data-binary @''' + artifactPath + ''' \
+                            ''' + githubRepoUrl + '''/releases/latest/assets?name=add2vals
+                        '''
                     }
                 }
 
