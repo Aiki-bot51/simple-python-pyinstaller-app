@@ -33,8 +33,7 @@ node(){
 
                     withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                         sh """
-                            curl -sSL -b cookies.txt -c cookies.txt \
-                            -H 'Authorization: token \$GITHUB_TOKEN' \
+                            curl -sSL -H 'Authorization: token $GITHUB_TOKEN' \
                             -H 'Content-Type: application/octet-stream' \
                             --data-binary @${artifactPath} \
                             '${githubRepoUrl}/releases/latest/assets?name=add2vals'
