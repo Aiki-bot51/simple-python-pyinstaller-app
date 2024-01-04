@@ -30,7 +30,6 @@ node(){
 
                     echo "Constructed URL: ${githubRepoUrl}/releases/latest/assets?name=add2vals"
                     echo "GitHub Token: ${env.GITHUB_TOKEN}"
-                    echo "Token: ${githubToken}"
 
                     withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                         sh """
