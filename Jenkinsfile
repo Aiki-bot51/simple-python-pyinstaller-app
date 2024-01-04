@@ -22,6 +22,9 @@ node(){
                 archiveArtifacts "sources/dist/add2vals"
                 sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 
+                def workspacePath = pwd()
+                echo "Jenkins workspace path: ${workspacePath}"
+
                 // Upload artifact to GitHub Releases
                 script {
                     def githubToken = env.GITHUB_TOKEN
@@ -32,10 +35,10 @@ node(){
 
                     withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                         sh """
-                            curl -sSL -H 'Authorization: token $GITHUB_TOKEN' \
-                            -H 'Content-Type: application/octet-stream' \
+                            curl -sSL -H "Authorization: token $GITHUB_TOKEN" \
+                            -H "Content-Type: application/octet-stream" \
                             --data-binary @${artifactPath} \
-                            '${githubRepoUrl}/releases/latest/assets?name=add2vals'
+                            "${githubRepoUrl}/releases/latest/assets?name=add2vals"
                         """.stripIndent()
                     }
                 }
