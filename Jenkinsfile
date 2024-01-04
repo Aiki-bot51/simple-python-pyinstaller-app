@@ -18,7 +18,7 @@ node(){
                 unstash name: 'compiled-results'
                 sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
                 echo 'Kriteria 3, tunggu 1 menit...'
-                sh 'sleep 60'
+                //sh 'sleep 60'
                 archiveArtifacts "sources/dist/add2vals"
                 sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 
@@ -29,11 +29,13 @@ node(){
                     def githubRepoUrl = env.GITHUB_REPO_URL  // Assume GITHUB_REPO_URL is an environment variable or parameter
     
                     withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                        sh """curl -sSL -H 'Authorization: token ${GITHUB_TOKEN}' \
-                            -H 'Content-Type: application/octet-stream' \
-                            --data-binary @${artifactPath} \
-                            '${githubRepoUrl}/releases/latest/assets?name=add2vals'"""
-                    } 
+                    sh """
+                        curl -sSL -H 'Authorization: token ${GITHUB_TOKEN}' \
+                        -H 'Content-Type: application/octet-stream' \
+                        --data-binary @${artifactPath} \
+                        '${githubRepoUrl}/releases/latest/assets?name=add2vals'
+                        """
+                    }
                 }
 
             }
