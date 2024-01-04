@@ -29,11 +29,12 @@ node(){
                     def githubRepoUrl = 'https://github.com/Aiki-bot51/simple-python-pyinstaller-app'  // Assume GITHUB_REPO_URL is an environment variable or parameter
 
                     echo "Constructed URL: ${githubRepoUrl}/releases/latest/assets?name=add2vals"
+                    echo "GitHub Token: ${env.GITHUB_TOKEN}"
                     echo "Token: ${githubToken}"
 
                     withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                         sh """
-                            curl -v -sSL -H 'Authorization: token \$GITHUB_TOKEN' \
+                            curl -sSL -H 'Authorization: token \$GITHUB_TOKEN' \
                             -H 'Content-Type: application/octet-stream' \
                             --data-binary @${artifactPath} \
                             '${githubRepoUrl}/releases/latest/assets?name=add2vals'
