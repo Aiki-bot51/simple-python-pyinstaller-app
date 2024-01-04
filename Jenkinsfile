@@ -34,7 +34,7 @@ node(){
                             -H 'Content-Type: application/octet-stream' \
                             --data-binary @${artifactPath} \
                             '${githubRepoUrl}/releases/latest/assets?name=add2vals'
-                        """
+                        """.stripIndent()
                     }
                 }
 
