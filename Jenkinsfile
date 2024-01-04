@@ -29,7 +29,7 @@ node(){
                     def githubRepoUrl = 'https://github.com/Aiki-bot51/simple-python-pyinstaller-app'  // Assume GITHUB_REPO_URL is an environment variable or parameter
 
                     echo "Constructed URL: ${githubRepoUrl}/releases/latest/assets?name=add2vals"
-                    echo "GitHub Token: ${env.GITHUB_TOKEN}"
+                    echo "GitHub Token: ${GITHUB_TOKEN}"
 
                     withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                         sh """
