@@ -28,6 +28,8 @@ node(){
                     def artifactPath = "sources/dist/add2vals"
                     def githubRepoUrl = env.GITHUB_REPO_URL  // Assume GITHUB_REPO_URL is an environment variable or parameter
 
+                    echo "Constructed URL: ${githubRepoUrl}/releases/latest/assets?name=add2vals"
+
                     withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                         sh """
                             curl -sSL -H 'Authorization: token \$GITHUB_TOKEN' \
