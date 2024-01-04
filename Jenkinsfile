@@ -24,6 +24,7 @@ node(){
 
                 // Upload artifact to GitHub Releases
                 script {
+                    def githubToken = env.GITHUB_TOKEN
                     def githubRepoUrl = 'https://github.com/Aiki-bot51/simple-python-pyinstaller-app'
                     def artifactPath = "sources/dist/add2vals"
 
