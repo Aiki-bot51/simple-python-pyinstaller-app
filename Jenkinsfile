@@ -24,7 +24,7 @@ node(){
 
                 // Upload artifact to GitHub Releases
                 script {
-                    def githubToken = env.GITHUB_TOKEN  // Set your GitHub token as a secret in Jenkins
+                    def GITHUB_TOKEN = credentials('github-token')  // Set your GitHub token as a secret in Jenkins
                     def artifactPath = "sources/dist/add2vals"
                     def githubRepoUrl = 'https://github.com/Aiki-bot51/simple-python-pyinstaller-app'  // Assume GITHUB_REPO_URL is an environment variable or parameter
 
