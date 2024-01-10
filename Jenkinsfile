@@ -12,37 +12,18 @@ node(){
 //    stage('Manual Approval'){
 //        input message: 'Apakah hasil sudah OK? (Klik "Proceed" untuk Deploy)'
 //    }
-    stage('Deploy'){
-        withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python3']) {
+    stage('Deploy') {
+        withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python3', 'VERCEL_TOKEN=<your-vercel-token>']) {
             dir(path: env.BUILD_ID) {
                 unstash name: 'compiled-results'
                 sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
                 echo 'Kriteria 3, tunggu 1 menit...'
-                //sh 'sleep 60'
+                sh 'sleep 60'
                 archiveArtifacts "sources/dist/add2vals"
                 sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 
-                def workspacePath = pwd()
-                echo "Jenkins workspace path: ${workspacePath}"
-
-                // Upload artifact to GitHub Releases
-                script {
-                    def githubToken = env.GITHUB_TOKEN
-                    def githubRepoUrl = 'https://github.com/Aiki-bot51/simple-python-pyinstaller-app'
-                    def artifactPath = "sources/dist/add2vals"
-
-                    echo "Constructed URL: ${githubRepoUrl}/releases/latest/assets?name=add2vals"
-
-                    withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                        sh """
-                            curl -sSL -H "Authorization: token $GITHUB_TOKEN" \
-                            -H "Content-Type: application/octet-stream" \
-                            --data-binary @${artifactPath} \
-                            "${githubRepoUrl}/releases/latest/assets?name=add2vals"
-                        """.stripIndent()
-                    }
-                }
-
+                // Deploy to Vercel using Vercel CLI
+                sh "vercel --token $VERCEL_TOKEN --prod"
             }
         }
     }
