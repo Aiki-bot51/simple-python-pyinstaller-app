@@ -13,17 +13,19 @@ node(){
 //        input message: 'Apakah hasil sudah OK? (Klik "Proceed" untuk Deploy)'
 //    }
     stage('Deploy') {
-        withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python3', 'VERCEL_TOKEN=<your-vercel-token>']) {
-            dir(path: env.BUILD_ID) {
-                unstash name: 'compiled-results'
-                sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
-                echo 'Kriteria 3, tunggu 1 menit...'
-                sh 'sleep 60'
-                archiveArtifacts "sources/dist/add2vals"
-                sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+        withCredentials([usernamePassword(credentialsId: 'vercel-credentials', usernameVariable: 'VERCEL_TOKEN', passwordVariable: 'VERCEL_TOKEN')]) {
+            withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python3']) {
+                dir(path: env.BUILD_ID) {
+                    unstash name: 'compiled-results'
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
+                    echo 'Kriteria 3, tunggu 1 menit...'
+                    sh 'sleep 60'
+                    archiveArtifacts "sources/dist/add2vals"
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 
-                // Deploy to Vercel using Vercel CLI
-                sh "vercel --token $VERCEL_TOKEN --prod"
+                    // Deploy to Vercel using Vercel CLI
+                    sh "vercel --token $VERCEL_TOKEN --prod"
+                }
             }
         }
     }
