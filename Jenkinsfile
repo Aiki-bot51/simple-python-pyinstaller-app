@@ -19,7 +19,7 @@ node(){
                     unstash name: 'compiled-results'
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
                     echo 'Kriteria 3, tunggu 1 menit...'
-                    sh 'sleep 60'
+                    //sh 'sleep 60'
                     archiveArtifacts "sources/dist/add2vals"
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 
