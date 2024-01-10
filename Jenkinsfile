@@ -13,7 +13,7 @@ node(){
 //        input message: 'Apakah hasil sudah OK? (Klik "Proceed" untuk Deploy)'
 //    }
     stage('Deploy') {
-        withCredentials([usernamePassword(credentialsId: 'vercel-credentials', usernameVariable: 'VERCEL_TOKEN', passwordVariable: 'VERCEL_TOKEN')]) {
+        withCredentials([string(credentialsId: 'vercel-credentials', variable: 'VERCEL_TOKEN')]) {
             withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python3']) {
                 dir(path: env.BUILD_ID) {
                     unstash name: 'compiled-results'
