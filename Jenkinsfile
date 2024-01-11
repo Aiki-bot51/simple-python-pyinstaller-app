@@ -25,7 +25,7 @@ node(){
 
 
                 // Deploy to Vercel using Vercel CLI
-                sh "vercel --token \$VERCEL_TOKEN --prod --yes"
+                sh "vercel --token \$VERCEL_TOKEN --prod --yes --debug"
                 }
             }
         }
