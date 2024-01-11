@@ -23,11 +23,21 @@ node(){
                     archiveArtifacts "sources/dist/add2vals"
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 
+                    // Debugging: List contents of the current directory
+                    sh 'ls -la'
+
+                    // Debugging: List contents of the dist directory
                     sh 'ls -la sources/dist'
 
-                    // Deploy to Vercel using Vercel CLI
+                    // Archive artifacts
+                    archiveArtifacts "sources/dist/*"
+
+                    // Deploy only add2vals.py to Vercel using Vercel CLI
                     dir("sources/dist") {
-                        sh "vercel --token \$VERCEL_TOKEN --prod --yes add2vals"
+                        // Debugging: List contents of the current directory
+                        sh 'ls -la'
+
+                        sh "vercel --token \$VERCEL_TOKEN --prod --yes add2vals*"
                     }
                 }
             }
