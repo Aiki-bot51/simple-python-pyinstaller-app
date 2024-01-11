@@ -17,36 +17,15 @@ node(){
             withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python3']) {
                 dir(path: env.BUILD_ID) {
                     unstash name: 'compiled-results'
-
-                    // Create the sources/dist directory
-                    sh 'mkdir -p sources/dist'
-
-                    // Run PyInstaller to build add2vals.py in sources/dist
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py --distpath sources/dist'"
-
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
                     echo 'Kriteria 3, tunggu 1 menit...'
-                    sh 'sleep 60'
-
-                    // Debugging: List contents of the current directory
-                    sh 'ls -la'
-
-                    // Debugging: List contents of the dist directory
-                    sh 'ls -la sources/dist'
-
-                    // Archive artifacts
+                    //sh 'sleep 60'
                     archiveArtifacts "sources/dist/add2vals"
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 
-                    // Debugging: Verify the artifacts are correctly archived
-                    sh 'ls -la archives/'
 
-                    // Deploy only add2vals.py to Vercel using Vercel CLI
-                    dir("sources/dist") {
-                        // Debugging: List contents of the current directory
-                        sh 'ls -la'
-
-                        // Ensure proper usage of add2vals.py
-                        sh "vercel --token \$VERCEL_TOKEN --prod --yes add2vals"
-                    }
+                // Deploy to Vercel using Vercel CLI
+                sh "vercel --token \$VERCEL_TOKEN --prod --yes --debug"
                 }
             }
         }
