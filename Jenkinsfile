@@ -17,11 +17,15 @@ node(){
             withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python3']) {
                 dir(path: env.BUILD_ID) {
                     unstash name: 'compiled-results'
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
+
+                    // Create the sources/dist directory
+                    sh 'mkdir -p sources/dist'
+
+                    // Run PyInstaller to build add2vals.py in sources/dist
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py -D sources/dist'"
+
                     echo 'Kriteria 3, tunggu 1 menit...'
-                    //sh 'sleep 60'
-                    archiveArtifacts "sources/dist/add2vals"
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+                    sh 'sleep 60'
 
                     // Debugging: List contents of the current directory
                     sh 'ls -la'
