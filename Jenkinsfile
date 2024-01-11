@@ -22,7 +22,7 @@ node(){
                     sh 'mkdir -p sources/dist'
 
                     // Run PyInstaller to build add2vals.py in sources/dist
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F sources/add2vals.py --distpath sources/dist'"
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py --distpath sources/dist'"
 
                     echo 'Kriteria 3, tunggu 1 menit...'
                     sh 'sleep 60'
