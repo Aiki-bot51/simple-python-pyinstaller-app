@@ -23,9 +23,10 @@ node(){
                     archiveArtifacts "sources/dist/add2vals"
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 
+                    sh 'ls -la sources/dist'
 
-                // Deploy to Vercel using Vercel CLI
-                dir("sources/dist") {
+                    // Deploy to Vercel using Vercel CLI
+                    dir("sources/dist") {
                         sh "vercel --token \$VERCEL_TOKEN --prod --yes add2vals"
                     }
                 }
