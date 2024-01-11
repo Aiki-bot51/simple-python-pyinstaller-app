@@ -22,7 +22,7 @@ node(){
                     sh 'mkdir -p sources/dist'
 
                     // Run PyInstaller to build add2vals.py in sources/dist
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py -D sources/dist'"
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py --distpath sources/dist'"
 
                     echo 'Kriteria 3, tunggu 1 menit...'
                     sh 'sleep 60'
@@ -41,7 +41,7 @@ node(){
                         // Debugging: List contents of the current directory
                         sh 'ls -la'
 
-                        sh "vercel --token \$VERCEL_TOKEN --prod --yes add2vals*"
+                        sh "vercel --token \$VERCEL_TOKEN --prod --yes add2vals.py*"
                     }
                 }
             }
