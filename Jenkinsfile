@@ -22,7 +22,7 @@ node(){
                     sh 'mkdir -p sources/dist'
 
                     // Run PyInstaller to build add2vals.py in sources/dist
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py --distpath sources/dist'"
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F sources/add2vals.py --distpath sources/dist'"
 
                     echo 'Kriteria 3, tunggu 1 menit...'
                     sh 'sleep 60'
@@ -34,14 +34,15 @@ node(){
                     sh 'ls -la sources/dist'
 
                     // Archive artifacts
-                    archiveArtifacts "sources/dist/*"
+                    archiveArtifacts "sources/dist/add2vals"
 
                     // Deploy only add2vals.py to Vercel using Vercel CLI
                     dir("sources/dist") {
                         // Debugging: List contents of the current directory
                         sh 'ls -la'
 
-                        sh "vercel --token \$VERCEL_TOKEN --prod --yes add2vals.py*"
+                        // Ensure proper usage of add2vals.py
+                        sh "vercel --token \$VERCEL_TOKEN --prod --yes add2vals"
                     }
                 }
             }
