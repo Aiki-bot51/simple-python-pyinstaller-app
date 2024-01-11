@@ -36,6 +36,9 @@ node(){
                     // Archive artifacts
                     archiveArtifacts "sources/dist/*"
 
+                    // Debugging: Verify the artifacts are correctly archived
+                    sh 'ls -la archives/'
+
                     // Deploy only add2vals.py to Vercel using Vercel CLI
                     dir("sources/dist") {
                         // Debugging: List contents of the current directory
