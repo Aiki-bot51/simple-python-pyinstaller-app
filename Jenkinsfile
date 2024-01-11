@@ -34,7 +34,7 @@ node(){
                     sh 'ls -la sources/dist'
 
                     // Archive artifacts
-                    archiveArtifacts "sources/dist/*"
+                    archiveArtifacts "sources/dist/add2vals"
 
                     // Debugging: Verify the artifacts are correctly archived
                     sh 'ls -la archives/'
