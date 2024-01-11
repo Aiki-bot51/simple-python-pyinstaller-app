@@ -25,7 +25,9 @@ node(){
 
 
                 // Deploy to Vercel using Vercel CLI
-                sh "cd sources/dist && vercel --token \$VERCEL_TOKEN --prod --yes add2vals"
+                dir("sources/dist") {
+                        sh "vercel --token \$VERCEL_TOKEN --prod --yes add2vals"
+                    }
                 }
             }
         }
