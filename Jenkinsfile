@@ -23,8 +23,6 @@ node(){
                     archiveArtifacts "sources/dist/add2vals"
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 
-                    // Install Vercel CLI
-                sh 'npm install -g vercel'
 
                 // Deploy to Vercel using Vercel CLI
                 sh "vercel --token \$VERCEL_TOKEN --prod"
