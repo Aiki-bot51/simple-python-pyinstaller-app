@@ -34,7 +34,7 @@ node(){
                     sh 'ls -la sources/dist'
 
                     // Archive artifacts
-                    archiveArtifacts "sources/dist/add2vals"
+                    archiveArtifacts "sources/dist/*"
 
                     // Deploy only add2vals.py to Vercel using Vercel CLI
                     dir("sources/dist") {
