@@ -25,7 +25,7 @@ node(){
 
 
                 // Deploy to Vercel using Vercel CLI
-                sh "vercel --token \$VERCEL_TOKEN --prod --yes --debug"
+                sh "vercel --token \$VERCEL_TOKEN --prod simple-python-pyinstaller-app --yes --debug"
                 }
             }
         }
