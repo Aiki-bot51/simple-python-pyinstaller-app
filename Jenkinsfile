@@ -18,11 +18,9 @@ node(){
                 dir(path: env.BUILD_ID) {
                     unstash name: 'compiled-results'
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} /bin/bash -c 'rm -rf build dist'"
+                    //sh sleep 60
                     echo 'Kriteria 3, tunggu 1 menit...'
-                    //sh 'sleep 60'
                     archiveArtifacts "sources/dist/add2vals"
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
-
 
                     script {
                         // Deploy to Vercel
