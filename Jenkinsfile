@@ -17,18 +17,17 @@ node(){
             withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python3']) {
                 dir(path: env.BUILD_ID) {
                     unstash name: 'compiled-results'
-                    sh "docker run --rm -v ${VOLUME} ${IMAGE} /bin/bash -c 'rm -rf build dist'"
-                    //sh sleep 60
+                    sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
                     echo 'Kriteria 3, tunggu 1 menit...'
                     archiveArtifacts "sources/dist/add2vals"
 
                     script {
                         // Deploy to Vercel
-                        def vercelDeployOutput = sh(script: "vercel --token=\${VERCEL_TOKEN} --prod \$(pwd)/sources/dist/add2vals", returnStatus: true)
+                        def vercelDeployOutput = sh(script: "vercel --token=${VERCEL_TOKEN} --prod sources/dist/add2vals", returnStatus: true)
                         
                         // Check if the deployment already exists and use redeploy if true
                         if (vercelDeployOutput == 0) {
-                            sh "vercel --token=\${VERCEL_TOKEN} --prod --confirm \$(pwd)/sources/dist/add2vals"
+                            sh "vercel --token=${VERCEL_TOKEN} --prod --confirm sources/dist/add2vals"
                         }
                     }
                 }
