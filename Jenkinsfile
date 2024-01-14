@@ -22,14 +22,15 @@ node(){
                     archiveArtifacts "sources/dist/add2vals"
 
                     script {
+                        echo "Current working directory: ${pwd()}"
+                        // Navigate to the deployment directory
                         dir("sources/dist") {
+                            echo "Changed directory to: ${pwd()}"
                             // Deploy to Vercel from the directory
-                            def vercelDeployOutput = sh(script: "vercel --token=\${VERCEL_TOKEN} --prod sources/dist -y", returnStatus: true)
-
+                            sh "vercel --token=\${VERCEL_TOKEN} --prod -y"
+        
                             // Check if the deployment already exists and use redeploy if true
-                            if (vercelDeployOutput == 0) {
-                                sh "vercel --token=\${VERCEL_TOKEN} --prod --confirm sources/dist -y"
-                            }
+                            sh "vercel --token=\${VERCEL_TOKEN} --prod --confirm -y"
                         }
                     }
                 }
