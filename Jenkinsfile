@@ -24,13 +24,17 @@ node(){
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
 
 
-                // Deploy to Vercel using Vercel CLI
-                dir(path: './project') {
-                    // Run Vercel deployment command
-                    sh "vercel --token \$VERCEL_TOKEN --prod simple-python-pyinstaller-app --yes --debug"
+                    script {
+                        // Deploy to Vercel
+                        def vercelDeployOutput = sh(script: "vercel --token=${VERCEL_TOKEN} --prod sources/dist/add2vals", returnStatus: true)
+                        
+                        // Check if the deployment already exists and use redeploy if true
+                        if (vercelDeployOutput == 0) {
+                            sh "vercel --token=${VERCEL_TOKEN} --prod --confirm sources/dist/add2vals"
+                        }
+                    }
                 }
             }
         }
     }
-}
 }
