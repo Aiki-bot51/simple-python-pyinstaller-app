@@ -24,11 +24,11 @@ node(){
 
                     script {
                         // Deploy to Vercel
-                        def vercelDeployOutput = sh(script: "vercel --token=${VERCEL_TOKEN} --prod $(pwd)/sources/dist/add2vals", returnStatus: true)
+                        def vercelDeployOutput = sh(script: "vercel --token=\${VERCEL_TOKEN} --prod \$(pwd)/sources/dist/add2vals", returnStatus: true)
                         
                         // Check if the deployment already exists and use redeploy if true
                         if (vercelDeployOutput == 0) {
-                            sh "vercel --token=${VERCEL_TOKEN} --prod --confirm $(pwd)/sources/dist/add2vals"
+                            sh "vercel --token=\${VERCEL_TOKEN} --prod --confirm \$(pwd)/sources/dist/add2vals"
                         }
                     }
                 }
