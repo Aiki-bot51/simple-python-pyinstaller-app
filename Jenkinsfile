@@ -21,11 +21,11 @@ node(){
                     echo 'Kriteria 3, tunggu 1 menit...'
                     archiveArtifacts "sources/dist/add2vals"
 
-                    def vercelDeployOutput = sh(script: "vercel --token=\${VERCEL_TOKEN} --prod \$(pwd)/sources/dist", returnStatus: true)
+                    def vercelDeployOutput = sh(script: "vercel --token=\${VERCEL_TOKEN} --prod \$(pwd)/sources/dist -y", returnStatus: true)
     
                     // Check if the deployment already exists and use redeploy if true
                     if (vercelDeployOutput == 0) {
-                        sh "vercel --token=\${VERCEL_TOKEN} --prod --confirm \$(pwd)/sources/dist"
+                        sh "vercel --token=\${VERCEL_TOKEN} --prod --confirm \$(pwd)/sources/dist -y"
                     }
                 }
             }
