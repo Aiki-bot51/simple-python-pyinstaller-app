@@ -21,19 +21,26 @@ node(){
                     echo 'Kriteria 3, tunggu 1 menit...'
                     archiveArtifacts "sources/dist/add2vals"
 
-                    script {
-                        echo "Current working directory: ${pwd()}"
-                        // Navigate to the deployment directory
-                        dir("sources/dist") {
-                            echo "Changed directory to: ${pwd()}"
-                            // Deploy to Vercel from the directory
-                            sh "vercel --token=\${VERCEL_TOKEN} --prod -y"
-        
-                            // Check if the deployment already exists and use redeploy if true
-                            sh "vercel --token=\${VERCEL_TOKEN} --prod --confirm -y"
-                        }
-                    }
                 }
+            }
+        }
+
+        script {
+            echo 'Debug information:'
+            sh "ls -la /var/jenkins_home/workspace/submission-cicd-pipeline-aikyodzakia/181/sources/dist"
+
+            dir("sources/dist") {
+                sh "ls -la"
+
+                // Explicitly create .vercel directory
+                sh "mkdir .vercel"
+                sh "chown jenkins:jenkins .vercel"
+
+                // Deploy to Vercel
+                sh "vercel --token=${VERCEL_TOKEN} --prod -y --debug"
+                
+                // Check if the deployment already exists and use redeploy if true
+                sh "vercel --token=${VERCEL_TOKEN} --prod --confirm -y"
             }
         }
     }
