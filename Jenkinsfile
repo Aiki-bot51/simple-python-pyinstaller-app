@@ -22,7 +22,7 @@ node(){
                     archiveArtifacts "sources/dist/add2vals"
 
                     script {
-                        dir("$(pwd)/sources/dist") {
+                        dir("$PWD/sources/dist") {
                             // Deploy to Vercel from the directory
                             def vercelDeployOutput = sh(script: "vercel --token=\${VERCEL_TOKEN} --prod \$(pwd)/sources/dist -y", returnStatus: true)
 
