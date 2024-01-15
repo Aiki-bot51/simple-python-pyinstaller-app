@@ -30,6 +30,9 @@ node(){
                         // Check if the project exists on Vercel
                         def projectExists = sh(script: "vercel --token=\${VERCEL_TOKEN} inspect .", returnStatus: true)
 
+                        sh sudo chmod -R -u+rwx .
+                        sh sudo chown -R jenkins:jenkins .
+
                         // Deploy or redeploy based on project existence
                         if (projectExists == 0) {
                             echo "Vercel project exists. Triggering redeploy..."
