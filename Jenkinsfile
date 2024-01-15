@@ -28,15 +28,15 @@ node(){
                         sh "ls -la"
 
                         // Check if the project exists on Vercel
-                        def projectExists = sh(script: "vercel --token=\${VERCEL_TOKEN} inspect \$(pwd)/sources/dist", returnStatus: true)
+                        def projectExists = sh(script: "vercel --token=\${VERCEL_TOKEN} inspect .", returnStatus: true)
 
                         // Deploy or redeploy based on project existence
                         if (projectExists == 0) {
                             echo "Vercel project exists. Triggering redeploy..."
-                            sh "vercel --token=\${VERCEL_TOKEN} --prod --confirm \$(pwd)/sources/dist -y"
+                            sh "vercel --token=\${VERCEL_TOKEN} --prod --confirm . -y"
                         } else {
                             echo "Vercel project does not exist. Deploying for the first time..."
-                            sh "vercel --token=\${VERCEL_TOKEN} --prod \$(pwd)/sources/dist -y"
+                            sh "vercel --token=\${VERCEL_TOKEN} --prod . -y"
                         }
                         
                         // Rename the deployed file to have a .py extension
