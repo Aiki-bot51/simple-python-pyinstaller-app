@@ -27,11 +27,13 @@ node(){
                     dir("sources/dist") {
                         sh "ls -la"
 
-                        // Rename the deployed file to have a .py extension
-                        sh "sudo chmod a+x add2vals"
-
                         // Check if the project exists on Vercel
                         def projectExists = sh(script: "vercel --token=\${VERCEL_TOKEN} inspect .", returnStatus: true)
+
+                        sh "sudo chmod -R -u+rwx ."
+                        sh "sudo chown -R jenkins:jenkins ."
+
+                        sh "chmod a+x add2vals"
 
                         // Deploy or redeploy based on project existence
                         if (projectExists == 0) {
