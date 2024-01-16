@@ -33,7 +33,7 @@ node(){
                         sh "sudo chmod -R -u+rwx ."
                         sh "sudo chown -R jenkins:jenkins ."
 
-                        sh "chmod a+x add2vals"
+                        sh "mv add2vals add2vals.py"
 
                         // Deploy or redeploy based on project existence
                         if (projectExists == 0) {
