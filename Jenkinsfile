@@ -27,7 +27,7 @@ node(){
                     dir("sources/dist") {
                         sh "ls -la"
 
-                        sh "chown jenkins:jenkins add2vals"
+                        sh "sudo chown jenkins:jenkins add2vals"
 
                         // Rename the deployed file to have a .py extension
                         sh "mv add2vals add2vals.py"
