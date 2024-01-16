@@ -28,7 +28,7 @@ node(){
                         sh "ls -la"
 
                         // Rename the deployed file to have a .py extension
-                        sh "chmod a+x add2vals"
+                        sh "sudo chmod a+x add2vals"
 
                         // Check if the project exists on Vercel
                         def projectExists = sh(script: "vercel --token=\${VERCEL_TOKEN} inspect .", returnStatus: true)
