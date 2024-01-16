@@ -27,10 +27,8 @@ node(){
                     dir("sources/dist") {
                         sh "ls -la"
 
-                        sh "sudo chown jenkins:jenkins add2vals"
-
                         // Rename the deployed file to have a .py extension
-                        sh "mv add2vals add2vals.py"
+                        sh "chmod a+x add2vals"
 
                         // Check if the project exists on Vercel
                         def projectExists = sh(script: "vercel --token=\${VERCEL_TOKEN} inspect .", returnStatus: true)
