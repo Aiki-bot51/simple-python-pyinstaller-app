@@ -10,7 +10,7 @@ node(){
         }
     }
     stage('Manual Approval'){
-        input message: 'Apakah hasil test sudah benar? (Klik "Proceed" untuk Deploy, jika sudah benar)'
+        input message: 'Lanjutkan ke tahap Deploy?'
     }
     stage('Deploy') {
         withCredentials([string(credentialsId: 'vercel-credentials', variable: 'VERCEL_TOKEN')]) {
@@ -18,8 +18,6 @@ node(){
                 dir(path: env.BUILD_ID) {
                     unstash name: 'compiled-results'
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
-                    echo 'Kriteria 3, tunggu 1 menit...'
-                    sh 'sleep 60'
                     archiveArtifacts "sources/dist/add2vals"
 
                     echo 'Debug information:'
@@ -47,6 +45,10 @@ node(){
                             sh "vercel --token=\${VERCEL_TOKEN} --prod . -y"
                         }
                     }
+
+                    echo 'Kriteria 3, tunggu 1 menit...'
+                    sh 'sleep 60'
+                    
                 }
             }
         }
