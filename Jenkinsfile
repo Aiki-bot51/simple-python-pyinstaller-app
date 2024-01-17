@@ -9,9 +9,9 @@ node(){
             sh 'py.test --junit-xml test-reports/results.xml sources/test_calc.py'
         }
     }
-//    stage('Manual Approval'){
-//        input message: 'Apakah hasil sudah OK? (Klik "Proceed" untuk Deploy)'
-//    }
+    stage('Manual Approval'){
+        input message: 'Apakah hasil test sudah benar? (Klik "Proceed" untuk Deploy, jika sudah benar)'
+    }
     stage('Deploy') {
         withCredentials([string(credentialsId: 'vercel-credentials', variable: 'VERCEL_TOKEN')]) {
             withEnv(['VOLUME=$(pwd)/sources:/src', 'IMAGE=cdrx/pyinstaller-linux:python3']) {
@@ -19,6 +19,7 @@ node(){
                     unstash name: 'compiled-results'
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} 'pyinstaller -F add2vals.py'"
                     echo 'Kriteria 3, tunggu 1 menit...'
+                    sh 'sleep 60'
                     archiveArtifacts "sources/dist/add2vals"
 
                     echo 'Debug information:'
@@ -30,10 +31,12 @@ node(){
                         // Check if the project exists on Vercel
                         def projectExists = sh(script: "vercel --token=\${VERCEL_TOKEN} inspect .", returnStatus: true)
 
+                        // memberi akses read write execute ke user jenkins
                         sh "sudo chmod -R -u+rwx ."
                         sh "sudo chown -R jenkins:jenkins ."
 
-                        sh "mv add2vals add2vals.py"
+                        // membuat add2vals menjadi executable
+                        sh "sudo chmod a+x add2vals"
 
                         // Deploy or redeploy based on project existence
                         if (projectExists == 0) {
